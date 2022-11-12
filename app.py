@@ -1,5 +1,5 @@
 import flask
-from flask import jsonify, render_template
+from flask import jsonify, render_template, request
 
 app = flask.Flask(__name__)
 DOMAIN = "dealAD"
@@ -20,6 +20,9 @@ def create_buy():
 
 @app.route('/create/buy', methods=['GET', 'POST'])
 def create_buy_action():
+    amount = request.get("amount")
+    rate = request.get("rate")
+    print(amount,rate)
     return render_template("posts/create_buy.html")
 
 # @app.route(f'{DOMAIN}/createSell/', methods=['GET'])
