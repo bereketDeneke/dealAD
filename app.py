@@ -1,18 +1,26 @@
 import flask
 from flask import jsonify, render_template
-validate = __import__("backend/validate")
 
 app = flask.Flask(__name__)
 DOMAIN = "dealAD"
 
-@app.route('/register', methods=['GET'])
-def register():
-    return render_template("register.html")
+@app.route('/create', methods=['GET'])
+def create_post():
+    return render_template("create_post.html")
+@app.route('/create/sell', methods=['GET'])
+def create_sell():
+    return render_template("create_sell.html")
 
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    return render_template("register.html")
+@app.route('/create/sell', methods=['GET', 'POST'])
+def create_sell_action():
+    return render_template("create_sell.html")
+@app.route('/create/buy', methods=['GET'])
+def create_buy():
+    return render_template("create_buy.html")
 
+@app.route('/create/buy', methods=['GET', 'POST'])
+def create_buy_action():
+    return render_template("create_buy.html")
 @app.route(f'{DOMAIN}/createSell/', methods=['GET'])
 def getMembers(request):
     return render_template("createsellPost.html", request)
@@ -21,6 +29,7 @@ def getMembers(request):
 def register(request):
     validate.validateInput(request)
 
+app.run(debug=True)
 
 
 
