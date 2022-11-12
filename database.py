@@ -1,20 +1,9 @@
 import sqlite3
 
-database = None
-database_cursor = None 
-
-def open():
-    global database_cursor
-    global database
-
-    database = sqlite3.connect("postdb.db", uri=True, check_same_thread = False)
-    database_cursor = database.cursor()
-
-def close():
-    database_cursor.close()
+database = sqlite3.connect("postdb.db", uri=True, check_same_thread=False)
+database_cursor = database.cursor()
 
 def INIT():
-    open()
     create_sell_table_query = """ CREATE TABLE IF NOT EXISTS sell_posts (
                                             post_id integer PRIMARY KEY AUTOINCREMENT,
                                             user_id integer,
@@ -39,28 +28,22 @@ def INIT():
     database_cursor.execute(create_users_table_query)
     database_cursor.execute(create_buy_table_query)
     database_cursor.execute(create_sell_table_query)
-    close()
 
 def getDB():
     return database, database_cursor
 
 def register(username, netid, password):
-    open()
-    database_cursor.execute("SELECT * FROM users WHERE net_id =?", (netid,))
+    database_cursor.execute("SELECT * FROM users WHERE netid =? or", (netid,))
     user = database_cursor.fetchone()
 
     if user is None:
-        database_cursor.execute("INSERT INTO users (user_name, password, net_id) VALUES (?,?,?)", (username, password, netid))
-        close()
-        return True
+        database_cursor.execute("INSERT INTO users (firstname, password, netid) VALUES (?,?,?)", (username, password, netid))
     else:
         return "User already exist"
 
 def login(netid, password):
-    open()
-    database_cursor.execute("SELECT * FROM users WHERE net_id =? and password=?", (netid, password))
+    database_cursor.execute("SELECT * FROM users WHERE netid =? and password=?", (netid, password))
     user = database_cursor.fetchone()
-    close()
 
     if user is None:        
         return False # the user is not registered
@@ -75,7 +58,6 @@ def my_posts(request):
     if not login(netid, password):
         return False # the user is not logged in
     
-    open()
     # select the posts
     database_cursor.execute("SELECT * FROM buy_posts WHERE user_name =? ", (netid))
     user = database_cursor.fetchall()
@@ -84,9 +66,9 @@ def my_posts(request):
     user += database_cursor.fetchall()
 
     if user is None:
-        close()
         return False # the user is not registered
     
     print(user)
-    close()
-    
+
+
+####################################################
