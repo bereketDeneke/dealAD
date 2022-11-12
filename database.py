@@ -82,7 +82,7 @@ def login(netid, password):
 def my_posts(netid):
     open()
     # select the posts
-    database_cursor.execute("SELECT * FROM buy_posts WHERE user_name =? ", (netid))
+    database_cursor.execute("SELECT * FROM buy_posts WHERE user_name =? ", (netid,))
     user = database_cursor.fetchall()
 
     database_cursor.execute("SELECT * FROM sell_posts WHERE user_name =? ", (netid))

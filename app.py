@@ -8,7 +8,7 @@ app = flask.Flask(__name__)
 @app.route('/', methods=['GET','POST'])
 def login_tem():
     if request.method == 'POST':
-        net_id = request.form['netId']
+        net_id = request.form['net_id']
         password = request.form['password']
         exist = login(net_id, password)
 
@@ -72,13 +72,14 @@ def market_buy():
     sort = request.args.get('sort')
     buy_posts = getBuyPosts(sort)
     info = request.cookies.get('info', None)
+    info = info.split(',')
     username = info[0]
     password = info[1]
-    
+
     if login(username, password):
         return render_template("posts/browse_buy.html", buy_posts=buy_posts)
     else:
-        return login_tem()
+        return redirect('./')
 
 @app.route('/market/sell')
 def market_sell():
