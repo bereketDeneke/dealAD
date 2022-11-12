@@ -69,10 +69,12 @@ INIT()
 
 @app.route('/market/buy')
 def market_buy():
-    buy_posts = getBuyPosts()
+    sort = request.args.get('sort')
+    buy_posts = getBuyPosts(sort)
     info = request.cookies.get('info', None)
     username = info[0]
     password = info[1]
+    
     if login(username, password):
         return render_template("posts/browse_buy.html", buy_posts=buy_posts)
     else:
@@ -80,7 +82,8 @@ def market_buy():
 
 @app.route('/market/sell')
 def market_sell():
-    sell_posts = getSellPosts()
+    sort = request.args.get('sort')
+    sell_posts = getSellPosts(sort)
     info = request.cookies.get('info', None)
     username = info[0]
     password = info[1]
@@ -117,10 +120,9 @@ def create_sell_action():
         username = info[0]
         password = info[1]
         if login(username, password):
-            user_id = "1234"
             amount = request.form.get("amount")
             rate = request.form.get("rate")
-            create_sell_post(user_id, amount, rate)
+            create_sell_post(username, amount, rate)
             return render_template("posts/create_sell.html")
         else:
             return login_tem()
@@ -143,4 +145,3 @@ def create_buy_action():
     return render_template("posts/create_sell.html")
 
 app.run(debug=True)
-

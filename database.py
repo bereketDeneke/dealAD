@@ -98,19 +98,36 @@ def my_posts(netid):
     return user
 
 ####################################################
-
 def create_sell_post(user_id, amount, rate):
-    database_cursor.execute("INSERT INTO sell_posts (user_id, amount, rate) VALUES (?,?,?)",
+    open()
+    database_cursor.execute("INSERT INTO sell_posts (net_id, amount, rate) VALUES (?,?,?)",
                             (user_id, amount, rate))
     database.commit()
+    close()
 
 def create_buy_post(user_id, amount, rate):
-    database_cursor.execute("INSERT INTO buy_posts (user_id, amount, rate) VALUES (?,?,?)",
+    open()
+    database_cursor.execute("INSERT INTO buy_posts (net_id, amount, rate) VALUES (?,?,?)",
                             (user_id, amount, rate))
     database.commit()
-def getSellPosts():
-    return database_cursor.execute("SELECT * FROM sell_posts").fetchall()
+    close()
+def getSellPosts(sort):
+    open()
+    if sort == "cheap_first":
+        return database_cursor.execute("SELECT * FROM sell_posts ORDER BY rate ASC").fetchall()
+    elif sort == "cheap_last":
+        return database_cursor.execute("SELECT * FROM sell_posts ORDER BY rate DESC").fetchall()
+    elif sort == "recent":
+        return database_cursor.execute("SELECT * FROM sell_posts ORDER BY post_id DESC").fetchall()
+    close()
 
 
-def getBuyPosts():
-    return database_cursor.execute("SELECT * FROM buy_posts").fetchall()
+def getBuyPosts(sort):
+    open()
+    if sort == "cheap_first":
+        return database_cursor.execute("SELECT * FROM buy_posts ORDER BY rate ASC").fetchall()
+    elif sort == "cheap_last":
+        return database_cursor.execute("SELECT * FROM buy_posts ORDER BY rate DESC").fetchall()
+    elif sort == "recent":
+        return database_cursor.execute("SELECT * FROM buy_posts ORDER BY post_id DESC").fetchall()
+    close()
