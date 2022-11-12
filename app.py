@@ -58,7 +58,8 @@ def myPosts():
     # print("================================")
     # print(login(username, password))
     # print("================================")
-    if login(username, password):
+    exist = login(username, password)
+    if exist:
         posts = my_posts(username, password)
         return render_template("posts/my_posts.html", posts=posts)
     else:
