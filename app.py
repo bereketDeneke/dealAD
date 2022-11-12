@@ -20,22 +20,31 @@ database = sqlite3.connect("postdb.db", uri=True, check_same_thread=False)
 database_cursor = database.cursor()
 
 create_sell_table_query = """ CREATE TABLE IF NOT EXISTS sell_posts (
-                                        id integer PRIMARY KEY AUTOINCREMENT,
-                                        user_name text,
+                                        post_id integer PRIMARY KEY AUTOINCREMENT,
+                                        user_id integer,
                                         amount integer,
                                         rate integer
                                     ); """
 
 create_buy_table_query = """ CREATE TABLE IF NOT EXISTS buy_posts (
-                                        id integer PRIMARY KEY AUTOINCREMENT,
-                                        user_name text,
+                                        post_id integer PRIMARY KEY AUTOINCREMENT,
+                                        user_id integer,
                                         amount integer,
                                         rate integer
                                     ); """
 
 
+create_user_table_query = """ CREATE TABLE IF NOT EXISTS users (
+                                        user_id integer PRIMARY KEY AUTOINCREMENT,
+                                        user_name text,
+                                        net_id text,
+                                        password integer
+                                    ); """
+
+
 database_cursor.execute(create_buy_table_query)
 database_cursor.execute(create_sell_table_query)
+database_cursor.execute(create_user_table_query)
 
 @app.route('/')
 def home():
