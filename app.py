@@ -4,7 +4,6 @@ from flask import jsonify, render_template, request
 
 app = flask.Flask(__name__)
 
-INIT()
 @app.route('/', methods=['GET'])
 def login():
     if request.method == 'POST':
@@ -25,12 +24,12 @@ def myPosts():
 #  =================================================================
 @app.route('/market/buy')
 def market_buy():
-    buy_posts = getDB()[1].execute("SELECT * FROM buy_posts").fetchall()
+    buy_posts = getBuyPosts()
     return render_template("posts/browse_buy.html", buy_posts=buy_posts)
 
 @app.route('/market/sell')
 def market_sell():
-    sell_posts = getDB()[1].execute("SELECT * FROM sell_posts").fetchall()
+    sell_posts = getSellPosts()
     return render_template("posts/browse_sell.html", sell_posts=sell_posts)
 
 @app.route('/create', methods=['GET'])
@@ -47,10 +46,7 @@ def create_sell_action():
         user_name = "ay2395"
         amount = request.form.get("amount")
         rate = request.form.get("rate")
-        getDB()[0].execute(''' INSERT INTO sell_posts ( user_name, amount, rate )
-                               VALUES ( ?, ?,
-                               ?); ''', (user_name, amount, rate))
-        getDB()[1].commit()
+        create_sell_post(user_name, amount, rate)
         return render_template("posts/create_sell.html")
     return render_template("posts/create_sell.html")
 
@@ -64,10 +60,7 @@ def create_buy_action():
         user_name = "temp"#todo
         amount = request.form.get("amount")
         rate = request.form.get("rate")
-        getDB()[1].execute(''' INSERT INTO buy_posts ( user_name, amount, rate )
-                               VALUES ( ?, ?,
-                               ?); ''', (user_name, amount, rate))
-        getDB()[0].commit()
+        create_buy_post(user_name, amount, rate)
         return render_template("posts/create_buy.html")
     return render_template("posts/create_sell.html")
 
