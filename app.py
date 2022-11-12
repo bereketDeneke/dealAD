@@ -10,6 +10,10 @@ def login_tem():
     if request.method == 'POST':
         net_id = request.form['net_id']
         password = request.form['password']
+
+        if len(net_id) > 4 or len(password) > 0:
+            return render_template("login.html", errorMsg="")
+
         exist = login(net_id, password)
 
         if exist:
@@ -31,6 +35,9 @@ def register_tem():
         first_name = request.form['first_name']
         confPassword = request.form['conf_password']
         error = ""
+
+        if len(netId) > 4 or len(password) > 0:
+            return render_template("register.html", errorMsg="")
 
         if confPassword != password:
             error = "The password must match!!"
@@ -56,7 +63,7 @@ def myPosts():
     password = info[1]
 
     # print("================================")
-    # print(login(username, password))
+    # print(username, password)
     # print("================================")
     exist = login(username, password)
     if exist:
