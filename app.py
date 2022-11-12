@@ -25,7 +25,7 @@ def myPosts():
 @app.route('/market')
 def home():
     sell_posts = getDB.execute("SELECT * FROM sell_posts").fetchall()
-    buy_posts = getDB.execute("SELECT * FROM, buy_posts").fetchall()
+    buy_posts = getDB.execute("SELECT * FROM buy_posts").fetchall()
     return render_template("posts/browse.html", sell_posts=sell_posts, buy_posts=buy_posts)
 
 @app.route('/create', methods=['GET'])
