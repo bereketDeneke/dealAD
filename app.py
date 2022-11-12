@@ -4,18 +4,23 @@ from flask import render_template, request
 
 app = flask.Flask(__name__)
 
-@app.route('/', methods=['GET'])
-def login():
+@app.route('/', methods=['GET','POST'])
+def login_tem():
     if request.method == 'POST':
-        netId = request['netid']
-        password = request['password']
-        
-        if not login(netId, password):
-            return render_template('login.html', netId=netId, password=password)
-    return render_template("login.html")
+        net_id = request.form['netId']
+        password = request.form['password']
+        exist = login(net_id, password)
 
-@app.route('/register', methods=['GET'])
-def register():  
+        if exist:
+            return render_template('login.html', errorMsg = "")
+        else:
+            return render_template('login.html', errorMsg=f"The user ,{net_id.capitalize()}, does not exist!!")
+    
+    return render_template("login.html", errorMsg = "")
+
+
+@app.route('/register', methods=['GET','POST'])
+def register_tem():  
     if request.method == 'POST':
         netId = request.form['net_id']
         password = request.form['password']
