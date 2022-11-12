@@ -8,14 +8,29 @@ DOMAIN = "dealAD"
 database = sqlite3.connect("postdb.db", uri=True, check_same_thread=False)
 database_cursor = database.cursor()
 
-create_table_query = """ CREATE TABLE IF NOT EXISTS post_table (
+create_sell_table_query = """ CREATE TABLE IF NOT EXISTS sell_posts (
                                         id integer PRIMARY KEY AUTOINCREMENT,
                                         user_name text,
                                         amount integer,
                                         rate integer
                                     ); """
-database_cursor.execute(create_table_query)
 
+create_buy_table_query = """ CREATE TABLE IF NOT EXISTS buy_posts (
+                                        id integer PRIMARY KEY AUTOINCREMENT,
+                                        user_name text,
+                                        amount integer,
+                                        rate integer
+                                    ); """
+
+
+database_cursor.execute(create_buy_table_query)
+database_cursor.execute(create_sell_table_query)
+
+@app.route('/')
+def home():
+    sell_posts = database_cursor.execute("SELECT * FROM sell_posts").fetchall()
+    buy_posts = database_cursor.execute("SELECT * FROM buy_posts").fetchall()
+    return render_template("posts/browse.html", sell_posts=sell_posts, buy_posts=buy_posts)
 
 @app.route('/create', methods=['GET'])
 def create_post():
@@ -31,11 +46,10 @@ def create_sell_action():
         amount = request.form.get("amount")
         rate = request.form.get("rate")
 
-        database_cursor.execute(''' INSERT INTO post_table ( user_name, amount, rate )
+        database_cursor.execute(''' INSERT INTO sell_posts ( user_name, amount, rate )
                        VALUES ( ?, ?,
                        ?); ''', (name, amount, rate))
         database.commit()
-        print("Success")
         return render_template("posts/create_sell.html")
 
 @app.route('/create/buy')
@@ -48,11 +62,10 @@ def create_buy_action():
         name = "temp"#todo
         amount = request.form.get("amount")
         rate = request.form.get("rate")
-        database_cursor.execute(''' INSERT INTO post_table ( user_name, amount, rate )
+        database_cursor.execute(''' INSERT INTO buy_posts ( user_name, amount, rate )
                                VALUES ( ?, ?,
                                ?); ''', (name, amount, rate))
         database.commit()
-        print("Success")
         return render_template("posts/create_buy.html")
 
 # @app.route(f'{DOMAIN}/createSell/', methods=['GET'])
