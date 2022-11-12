@@ -22,11 +22,17 @@ def myPosts():
 
 
 #  =================================================================
-@app.route('/market')
-def home():
-    sell_posts = getDB.execute("SELECT * FROM sell_posts").fetchall()
+@app.route('/market/buy')
+def market_buy():
     buy_posts = getDB.execute("SELECT * FROM buy_posts").fetchall()
-    return render_template("posts/browse.html", sell_posts=sell_posts, buy_posts=buy_posts)
+    print(buy_posts)
+    return render_template("posts/browse_buy.html", buy_posts=buy_posts)
+
+@app.route('/market/sell')
+def market_sell():
+    sell_posts = getDB.execute("SELECT * FROM sell_posts").fetchall()
+    print(sell_posts)
+    return render_template("posts/browse_sell.html", sell_posts=sell_posts)
 
 @app.route('/create', methods=['GET'])
 def create_post():
@@ -38,7 +44,15 @@ def create_sell():
 
 @app.route('/create/sell', methods=['GET', 'POST'])
 def create_sell_action():
-    return render_template("posts/create_sell.html")
+    if request.method == "POST":
+        user_name = "ay2395"
+        amount = request.form.get("amount")
+        rate = request.form.get("rate")
+        database_cursor.execute(''' INSERT INTO sell_posts ( user_name, amount, rate )
+                               VALUES ( ?, ?,
+                               ?); ''', (user_name, amount, rate))
+        database.commit()
+        return render_template("posts/create_sell.html")
 
 @app.route('/create/buy', methods=['GET'])
 def create_buy():
@@ -47,12 +61,12 @@ def create_buy():
 @app.route('/create/buy', methods=['GET', 'POST'])
 def create_buy_action():
     if request.method == "POST":
-        name = "temp"#todo
+        user_name = "temp"#todo
         amount = request.form.get("amount")
         rate = request.form.get("rate")
         database_cursor.execute(''' INSERT INTO buy_posts ( user_name, amount, rate )
                                VALUES ( ?, ?,
-                               ?); ''', (name, amount, rate))
+                               ?); ''', (user_name, amount, rate))
         database.commit()
         return render_template("posts/create_buy.html")
 
