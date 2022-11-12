@@ -44,17 +44,12 @@ database_cursor.execute(create_users_table_query)
 database_cursor.execute(create_buy_table_query)
 database_cursor.execute(create_sell_table_query)
 
-@app.route('/browse/buy')
+@app.route('/')
 def home():
     sell_posts = database_cursor.execute("SELECT * FROM sell_posts").fetchall()
     buy_posts = database_cursor.execute("SELECT * FROM buy_posts").fetchall()
-    return render_template("posts/browse_buy.html", sell_posts=sell_posts, buy_posts=buy_posts)
+    return render_template("posts/browse.html", sell_posts=sell_posts, buy_posts=buy_posts)
 
-@app.route('/browse/sell')
-def home():
-    sell_posts = database_cursor.execute("SELECT * FROM sell_posts").fetchall()
-    buy_posts = database_cursor.execute("SELECT * FROM buy_posts").fetchall()
-    return render_template("posts/browse_sell.html", sell_posts=sell_posts)
 @app.route('/create', methods=['GET'])
 def create_post():
     return render_template("posts/create_post.html")
