@@ -1,8 +1,14 @@
 import flask
-from flask import jsonify
+from flask import jsonify, render_template
 validate = __import__("backend/validate")
 
 app = flask.Flask(__name__)
+
+# [Begin] Absera
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    return render_template()
+# [End] Absera
 
 @app.route('/api/v1/users', methods=['GET', 'POST'])
 def getMembers(request):
