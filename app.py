@@ -1,6 +1,7 @@
 from database import *
 import flask
-from flask import render_template, request
+from flask import render_template, request, make_response
+from methods import *
 
 app = flask.Flask(__name__)
 
@@ -12,7 +13,9 @@ def login_tem():
         exist = login(net_id, password)
 
         if exist:
-            return render_template('login.html', errorMsg = "")
+            view =  render_template('login.html', errorMsg = "")
+            response = make_response(view)
+            return response.set_cookie('info',[net_id, password], expireDate(1))
         else:
             return render_template('login.html', errorMsg=f"The user ,{net_id.capitalize()}, does not exist!!")
     
@@ -44,10 +47,16 @@ def register_tem():
     
     return render_template("register.html", errorMsg="")
 
-@app.route('/my_posts', methods=['GET'])
+@app.route('/my_posts', methods=['GET', 'POST'])
 def myPosts():
-    return render_template("posts/my_posts.html")
-
+    info = request.cookies.get('info', None)
+    username = info[0]
+    password = info[1]
+    
+    if login(username, password):
+        return render_template("posts/my_posts.html")
+    else:
+        return login_tem()
 
 #  =================================================================
 @app.route('/market/buy')
