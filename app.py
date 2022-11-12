@@ -13,7 +13,7 @@ def login_tem():
         exist = login(net_id, password)
 
         if exist:
-            view =  render_template('login.html', errorMsg = "")
+            view = render_template('login.html', errorMsg = "")
             response = make_response(view)
             return response.set_cookie('info',[net_id, password], expireDate(1))
         else:
@@ -64,31 +64,62 @@ INIT()
 @app.route('/market/buy')
 def market_buy():
     buy_posts = getBuyPosts()
-    return render_template("posts/browse_buy.html", buy_posts=buy_posts)
+    info = request.cookies.get('info', None)
+    username = info[0]
+    password = info[1]
+    if login(username, password):
+        return render_template("posts/browse_buy.html", buy_posts=buy_posts)
+    else:
+        return login_tem()
 
 @app.route('/market/sell')
 def market_sell():
     sell_posts = getSellPosts()
-    return render_template("posts/browse_sell.html", sell_posts=sell_posts)
+    info = request.cookies.get('info', None)
+    username = info[0]
+    password = info[1]
+    if login(username, password):
+        return render_template("posts/browse_buy.html", sell_posts=sell_posts)
+    else:
+        return login_tem()
 
 @app.route('/create', methods=['GET'])
 def create_post():
-    return render_template("posts/create_post.html")
+    info = request.cookies.get('info', None)
+    username = info[0]
+    password = info[1]
+    if login(username, password):
+        return render_template("posts/create_post.html")
+    else:
+        return login_tem()
 
 @app.route('/create/sell', methods=['GET'])
 def create_sell():
-    return render_template("posts/create_sell.html")
+    info = request.cookies.get('info', None)
+    username = info[0]
+    password = info[1]
+    if login(username, password):
+        return render_template("posts/create_sell.html")
+    else:
+        return login_tem()
 
 
 @app.route('/create/sell', methods=['GET', 'POST'])
 def create_sell_action():
     if request.method == "POST":
-        user_id = "1234"
-        amount = request.form.get("amount")
-        rate = request.form.get("rate")
-        create_sell_post(user_id, amount, rate)
-        return render_template("posts/create_sell.html")
-    return render_template("posts/create_sell.html")
+        info = request.cookies.get('info', None)
+        username = info[0]
+        password = info[1]
+        if login(username, password):
+            user_id = "1234"
+            amount = request.form.get("amount")
+            rate = request.form.get("rate")
+            create_sell_post(user_id, amount, rate)
+            return render_template("posts/create_sell.html")
+        else:
+            return login_tem()
+
+    return create_sell()
 
 @app.route('/create/buy', methods=['GET'])
 def create_buy():
