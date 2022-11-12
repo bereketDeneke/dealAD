@@ -69,4 +69,6 @@ def my_posts(request):
         return False # the user is not registered
     
     print(user)
-    
+
+
+####################################################
