@@ -69,18 +69,4 @@ def my_posts(request):
         return False # the user is not registered
     
     print(user)
-
-######################################
-
-def create_sell_post(user_name, amount, rate):
-    database_cursor.execute("INSERT INTO sell_posts (user_name, amount, rate) VALUES (?,?,?)",
-                            (user_name, amount, rate))
-
-def create_buy_post(user_name, amount, rate):
-    database_cursor.execute("INSERT INTO buy_posts (user_name, amount, rate) VALUES (?,?,?)",
-                            (user_name, amount, rate))
-def getSellPosts():
-    return database_cursor.execute("SELECT * FROM sell_posts").fetchall()
-
-def getBuyPosts():
-    return database_cursor.execute("SELECT * FROM buy_posts").fetchall()
+    

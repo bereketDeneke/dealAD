@@ -18,6 +18,7 @@
           <li class="nav-item">
             <a class="nav-link" aria-current="page" href="./register">Register</a>
           </li>
+
         </ul>
       </div>
     </div>
@@ -32,19 +33,22 @@
             <div class="card-body">
                 <!-- <p class="card-text"></p> -->
                 <div class="group-form">
-                    
-                    <!-- Net ID -->
-                    <label for="inputPassword5" class="form-label">Net ID</label>
-                    <input type="password" id="confirmPassword5" class="form-control" aria-describedby="passwordHelpBlock">
-                    
-    
-                    <!--  Password -->
-                    <label for="inputPassword5" class="form-label">Password</label>
-                    <input type="password" id="inputPassword5" class="form-control" aria-describedby="passwordHelpBlock">
-
-                    <!-- Submit Button -->
-                    <br>
-                    <input type="button" value="Login" class="btn btn-primary" style="float:right;"/>
+                    <form method="post">
+                        <!-- Net ID -->
+                        <label for="inputPassword5" class="form-label">Net ID</label>
+                        <input type="text" name="netId" id="netId" class="form-control" aria-describedby="passwordHelpBlock">
+                        
+                        <!--  Password -->
+                        <label for="inputPassword5" class="form-label">Password</label>
+                        <input type="password" name="password" id="inputPassword5" class="form-control" aria-describedby="passwordHelpBlock">
+                        
+                        {% if errorMsg%}
+                            <p class="error text-danger"><strong>Error: </strong> {{errorMsg }}</p>
+                        {% endif %}
+                        <!-- Submit Button -->
+                        <br>
+                        <input type="submit" value="Login" class="btn btn-primary" style="float:right;"/>
+                    </form>
                 </div>
             </div>
         </div>
