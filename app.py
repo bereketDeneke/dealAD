@@ -16,8 +16,29 @@ def login():
     return render_template("login.html")
 
 @app.route('/register', methods=['GET'])
-def register():
-    return render_template("register.html")
+def register():  
+    if request.method == 'POST':
+        netId = request.form['net_id']
+        password = request.form['password']
+        first_name = request.form['first_name']
+        confPassword = request.form['conf_password']
+        error = ""
+
+        if confPassword != password:
+            error = "The password must match!!"
+        elif first_name.isalpha():
+            error = "All the characters must be an alphabet!!"
+        elif netId[0].isdigit():
+            error = "The netId must start with alphabet. ie (ab1234)!!"
+
+        is_registered = register(first_name, netId, password)
+
+        if is_registered:
+            return render_template('register.html', errorMsg = "")
+        else:
+            return render_template('register.html', errorMsg=error)
+    
+    return render_template("register.html", errorMsg="")
 
 @app.route('/my_posts', methods=['GET'])
 def myPosts():
