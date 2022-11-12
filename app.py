@@ -24,6 +24,8 @@ def myPosts():
 
 
 #  =================================================================
+INIT()
+
 @app.route('/market/buy')
 def market_buy():
     buy_posts = getBuyPosts()
@@ -42,13 +44,14 @@ def create_post():
 def create_sell():
     return render_template("posts/create_sell.html")
 
+
 @app.route('/create/sell', methods=['GET', 'POST'])
 def create_sell_action():
     if request.method == "POST":
-        user_name = "ay2395"
+        user_id = "1234"
         amount = request.form.get("amount")
         rate = request.form.get("rate")
-        create_sell_post(user_name, amount, rate)
+        create_sell_post(user_id, amount, rate)
         return render_template("posts/create_sell.html")
     return render_template("posts/create_sell.html")
 
@@ -56,13 +59,14 @@ def create_sell_action():
 def create_buy():
     return render_template("posts/create_buy.html")
 
+
 @app.route('/create/buy', methods=['GET', 'POST'])
 def create_buy_action():
     if request.method == "POST":
-        user_name = "temp"#todo
+        user_id = "1234" #todo
         amount = request.form.get("amount")
         rate = request.form.get("rate")
-        create_buy_post(user_name, amount, rate)
+        create_buy_post(user_id, amount, rate)
         return render_template("posts/create_buy.html")
     return render_template("posts/create_sell.html")
 
