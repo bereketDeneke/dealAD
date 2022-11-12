@@ -6,6 +6,10 @@ app = flask.Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def login():
+    if request.method == 'POST':
+        netId = request['netid']
+        password = request['password']
+        
     return render_template("login.html")
 
 @app.route('/register', methods=['GET'])
@@ -16,10 +20,12 @@ def register():
 def myPosts():
     return render_template("posts/my_posts.html")
 
-@app.route('/')
+
+#  =================================================================
+@app.route('/market')
 def home():
     sell_posts = getDB.execute("SELECT * FROM sell_posts").fetchall()
-    buy_posts = getDB.execute("SELECT * FROM buy_posts").fetchall()
+    buy_posts = getDB.execute("SELECT * FROM, buy_posts").fetchall()
     return render_template("posts/browse.html", sell_posts=sell_posts, buy_posts=buy_posts)
 
 @app.route('/create', methods=['GET'])
