@@ -67,12 +67,13 @@ def register(username, netid, password):
 def login(netid, password):
     open()
     database_cursor.execute("SELECT * FROM users WHERE net_id =? and password=?", (netid, password))
-    user = database_cursor.fetchone()
+    user = database_cursor.fetchall()
 
     close()
     print("================================")
     print(netid, password)
     print("================================")
+
     if user is None:
         return False  # the user is not registered
     else:

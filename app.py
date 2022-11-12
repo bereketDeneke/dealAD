@@ -1,9 +1,13 @@
 from database import *
 import flask
-from flask import render_template, request, make_response, redirect
+from flask import render_template, request,session, make_response, redirect
 from methods import *
+from flask_session import Session
 
 app = flask.Flask(__name__)
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
+app.secret_key = 'hekls%%^$##GHB'
 
 @app.route('/', methods=['GET','POST'])
 def login_tem():
@@ -17,9 +21,8 @@ def login_tem():
         exist = login(net_id, password)
 
         if exist:
-            view = render_template('login.html', errorMsg = "")
-            response = make_response(view)
-            response.set_cookie('info', f"{net_id},{password}", expireDate(1))
+            session["netId"] = net_id
+            session["password"] = password
             return market_buy()
         else:
             return render_template('login.html', errorMsg=f"The user ,{net_id.capitalize()}, does not exist!!")
@@ -56,15 +59,12 @@ def register_tem():
     return render_template("register.html", errorMsg="")
 
 @app.route('/my_posts', methods=['GET', 'POST'])
-def myPosts():
-    info = request.cookies.get('info', None)
-    
-    if info is None:
-        login_tem()
+def myPosts():    
+    if not session.get("netId"):
+        return login_tem()
 
-    info = info.split(',')
-    username = info[0] # netId
-    password = info[1]
+    username = session.get('netId')
+    password = session.get('password')
 
     print("================================")
     print(username, password)
@@ -83,14 +83,15 @@ INIT()
 def market_buy():
     sort = request.args.get('sort')
     buy_posts = getBuyPosts(sort)
-    info = request.cookies.get('info', None)
 
-    if info is None:
-        login_tem()
+    if not session.get("netId"):
+        return redirect('./')
 
-    info = info.split(',')
-    username = info[0]
-    password = info[1]
+    username = session.get('netId')
+    password = session.get('password')
+
+    if buy_posts is None:
+        buy_posts = []
 
     if login(username, password):
         return render_template("posts/browse_buy.html", buy_posts=buy_posts)
@@ -101,9 +102,12 @@ def market_buy():
 def market_sell():
     sort = request.args.get('sort')
     sell_posts = getSellPosts(sort)
-    info = request.cookies.get('info', None)
-    username = info[0]
-    password = info[1]
+    
+    if not session.get("netId"):
+        return redirect('./')
+
+    username = session.get('netId')
+    password = session.get('password')
     if login(username, password):
         return render_template("posts/browse_buy.html", sell_posts=sell_posts)
     else:
@@ -111,9 +115,12 @@ def market_sell():
 
 @app.route('/create', methods=['GET'])
 def create_post():
-    info = request.cookies.get('info', None)
-    username = info[0]
-    password = info[1]
+    
+    if not session.get("netId"):
+        return redirect('./')
+
+    username = session.get('netId')
+    password = session.get('password')
     if login(username, password):
         return render_template("posts/create_post.html")
     else:
@@ -121,9 +128,11 @@ def create_post():
 
 @app.route('/create/sell', methods=['GET'])
 def create_sell():
-    info = request.cookies.get('info', None)
-    username = info[0]
-    password = info[1]
+    if not session.get("netId"):
+        return redirect('./')
+
+    username = session.get('netId')
+    password = session.get('password')
     if login(username, password):
         return render_template("posts/create_sell.html")
     else:
@@ -133,9 +142,11 @@ def create_sell():
 @app.route('/create/sell', methods=['GET', 'POST'])
 def create_sell_action():
     if request.method == "POST":
-        info = request.cookies.get('info', None)
-        username = info[0]
-        password = info[1]
+        if not session.get("netId"):
+            return redirect('./')
+
+        username = session.get('netId')
+        password = session.get('password')
         if login(username, password):
             amount = request.form.get("amount")
             rate = request.form.get("rate")
