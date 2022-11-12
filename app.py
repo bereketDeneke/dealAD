@@ -11,7 +11,7 @@ def login_tem():
         net_id = request.form['net_id']
         password = request.form['password']
 
-        if len(net_id) > 4 or len(password) > 0:
+        if len(net_id) <= 4 or len(password) <= 0:
             return render_template("login.html", errorMsg="")
 
         exist = login(net_id, password)
@@ -36,7 +36,7 @@ def register_tem():
         confPassword = request.form['conf_password']
         error = ""
 
-        if len(netId) > 4 or len(password) > 0:
+        if len(netId) <= 4 or len(password) <= 0:
             return render_template("register.html", errorMsg="")
 
         if confPassword != password:
