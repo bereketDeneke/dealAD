@@ -1,6 +1,6 @@
 from database import *
 import flask
-from flask import render_template, request, make_response
+from flask import render_template, request, make_response, redirect
 from methods import *
 
 app = flask.Flask(__name__)
@@ -15,7 +15,8 @@ def login_tem():
         if exist:
             view = render_template('login.html', errorMsg = "")
             response = make_response(view)
-            return response.set_cookie('info', f"{net_id}, {password}", expireDate(1))
+            response.set_cookie('info', f"{net_id}, {password}", expireDate(1))
+            return market_buy()
         else:
             return render_template('login.html', errorMsg=f"The user ,{net_id.capitalize()}, does not exist!!")
     
@@ -41,7 +42,8 @@ def register_tem():
         is_registered = register(first_name, netId, password)
 
         if is_registered:
-            login_tem()
+            # return redirect('./')
+            return login_tem()
         else:
             return render_template('register.html', errorMsg=error)
     
