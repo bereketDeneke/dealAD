@@ -1,8 +1,6 @@
-import sqlite3
+from database import *
 import flask
 from flask import jsonify, render_template, request
-
-from database import *
 
 app = flask.Flask(__name__)
 
@@ -18,15 +16,16 @@ def register():
 def myPosts():
     return render_template("posts/my_posts.html")
 
-@app.route('/')
-def browse_sell():
-    sell_posts = getDB()[1].execute("SELECT * FROM sell_posts").fetchall()
-    buy_posts = getDB()[1].execute("SELECT * FROM buy_posts").fetchall()
-    return render_template("posts/browse_sell.html", sell_posts=sell_posts, buy_posts=buy_posts)
+@app.route('/market')
+def home():
+    sell_posts = getDB.execute("SELECT * FROM sell_posts").fetchall()
+    buy_posts = getDB.execute("SELECT * FROM, buy_posts").fetchall()
+    return render_template("posts/browse.html", sell_posts=sell_posts, buy_posts=buy_posts)
 
 @app.route('/create', methods=['GET'])
 def create_post():
     return render_template("posts/create_post.html")
+
 @app.route('/create/sell', methods=['GET'])
 def create_sell():
     return render_template("posts/create_sell.html")
@@ -34,6 +33,7 @@ def create_sell():
 @app.route('/create/sell', methods=['GET', 'POST'])
 def create_sell_action():
     return render_template("posts/create_sell.html")
+
 @app.route('/create/buy', methods=['GET'])
 def create_buy():
     return render_template("posts/create_buy.html")
@@ -49,7 +49,6 @@ def create_buy_action():
                                ?); ''', (name, amount, rate))
         database.commit()
         return render_template("posts/create_buy.html")
-
 
 app.run(debug=True, port=80)
 
