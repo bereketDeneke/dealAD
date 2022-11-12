@@ -10,6 +10,8 @@ def login():
         netId = request['netid']
         password = request['password']
         
+        if not login(netId, password):
+            return render_template('login.html', netId=netId, password=password)
     return render_template("login.html")
 
 @app.route('/register', methods=['GET'])
