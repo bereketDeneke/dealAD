@@ -40,19 +40,9 @@ create_users_table_query = """ CREATE TABLE IF NOT EXISTS users (
                                         netid text
                                     ); """
 
-
-create_user_table_query = """ CREATE TABLE IF NOT EXISTS users (
-                                        user_id integer PRIMARY KEY AUTOINCREMENT,
-                                        user_name text,
-                                        net_id text,
-                                        password integer
-                                    ); """
-
-
 database_cursor.execute(create_users_table_query)
 database_cursor.execute(create_buy_table_query)
 database_cursor.execute(create_sell_table_query)
-database_cursor.execute(create_user_table_query)
 
 @app.route('/')
 def home():
