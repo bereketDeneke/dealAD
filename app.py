@@ -42,7 +42,6 @@ def register_tem():
         is_registered = register(first_name, netId, password)
 
         if is_registered:
-            # return redirect('./')
             return login_tem()
         else:
             return render_template('register.html', errorMsg=error)
@@ -56,6 +55,9 @@ def myPosts():
     username = info[0] # netId
     password = info[1]
 
+    # print("================================")
+    # print(login(username, password))
+    # print("================================")
     if login(username, password):
         posts = my_posts(username, password)
         return render_template("posts/my_posts.html", posts=posts)
