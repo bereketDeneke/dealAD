@@ -5,7 +5,6 @@ validate = __import__("backend/validate")
 app = flask.Flask(__name__)
 DOMAIN = "dealAD"
 
-# [Begin] Absera
 @app.route('/register', methods=['GET'])
 def register():
     return render_template("register.html")
@@ -13,7 +12,6 @@ def register():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     return render_template("register.html")
-# [End] Absera
 
 @app.route(f'{DOMAIN}/createSell/', methods=['GET'])
 def getMembers(request):
