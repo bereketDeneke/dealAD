@@ -50,11 +50,12 @@ def register_tem():
 @app.route('/my_posts', methods=['GET', 'POST'])
 def myPosts():
     info = request.cookies.get('info', None)
-    username = info[0]
+    username = info[0] # netId
     password = info[1]
-    
+
     if login(username, password):
-        return render_template("posts/my_posts.html")
+        posts = my_posts(username, password)
+        return render_template("posts/my_posts.html", posts=posts)
     else:
         return login_tem()
 

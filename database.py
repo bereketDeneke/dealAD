@@ -50,11 +50,7 @@ def login(netid, password):
     else:
         return True # the user logged in successfully
 
-def my_posts(request):
-    username = request.GET['username']
-    netid = request.GET['netid']
-    password = request.GET['password']
-
+def my_posts(netid, password):
     if not login(netid, password):
         return False # the user is not logged in
     
@@ -69,6 +65,7 @@ def my_posts(request):
         return False # the user is not registered
     
     print(user)
+    return user
 
 
 ####################################################
