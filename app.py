@@ -2,7 +2,6 @@ from database import *
 import flask
 from flask import render_template, request,session, make_response, redirect
 from methods import *
-from flask_session import Session
 
 app = flask.Flask(__name__)
 app.config["SESSION_PERMANENT"] = False
@@ -66,15 +65,12 @@ def myPosts():
     username = session.get('netId')
     password = session.get('password')
 
-    print("================================")
-    print(username, password)
-    print("================================")
     exist = login(username, password)
     if exist:
-        posts = my_posts(username, password)
+        posts = my_posts(username)
         return render_template("posts/my_posts.html", posts=posts)
     else:
-        return login_tem()
+        return redirect("./")
 
 #  =================================================================
 INIT()
