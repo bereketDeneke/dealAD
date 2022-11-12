@@ -15,7 +15,7 @@ def login_tem():
         if exist:
             view = render_template('login.html', errorMsg = "")
             response = make_response(view)
-            return response.set_cookie('info',[net_id, password], expireDate(1))
+            return response.set_cookie('info', f"{net_id}, {password}", expireDate(1))
         else:
             return render_template('login.html', errorMsg=f"The user ,{net_id.capitalize()}, does not exist!!")
     
@@ -41,7 +41,7 @@ def register_tem():
         is_registered = register(first_name, netId, password)
 
         if is_registered:
-            return render_template('register.html', errorMsg = "")
+            login_tem()
         else:
             return render_template('register.html', errorMsg=error)
     
@@ -50,6 +50,7 @@ def register_tem():
 @app.route('/my_posts', methods=['GET', 'POST'])
 def myPosts():
     info = request.cookies.get('info', None)
+    info = info.split(',')
     username = info[0] # netId
     password = info[1]
 
