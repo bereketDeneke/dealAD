@@ -1,6 +1,6 @@
 from database import *
 import flask
-from flask import render_template, request,session, make_response, redirect
+from flask import render_template, request,session, make_response, redirect, json, Response
 
 app = flask.Flask(__name__)
 app.config["SESSION_PERMANENT"] = False
@@ -64,15 +64,28 @@ def myPosts():
     username = session.get('netId')
     password = session.get('password')
 
-    print("================================")
-    print(username, password)
-    print("================================")
     exist = login(username, password)
     if exist:
-        posts = my_posts(username, password)
+        posts = my_posts(username)
+        print(username)
         return render_template("posts/my_posts.html", posts=posts)
     else:
-        return login_tem()
+        return redirect("./")
+
+@app.route('/api/v1/update/', methods=['POST'])
+def update_post_tem():
+    data = json.loads(request.data)
+    offer = data['offer']
+    rate = data['rate']
+    postId = data['postId']
+    return update_post(offer,rate,postId)
+
+
+@app.route('/api/v1/decline/', methods=['POST'])
+def delete_post_tem():
+    data = json.loads(request.data)
+    postId = data['postId']
+    return delete_post(postId)
 
 #  =================================================================
 INIT()
