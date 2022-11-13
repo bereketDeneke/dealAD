@@ -67,7 +67,7 @@ def login(netid, password):
     user = database_cursor.fetchall()
 
     close()
-    if user is None:
+    if user is None or len(user) <= 0:
         return False  # the user is not registered
     else:
         return True  # the user logged in successfully
