@@ -1,13 +1,14 @@
 from database import *
 import flask
-from flask import render_template, request,session, make_response, redirect, json, Response
+from flask import render_template, request, session, make_response, redirect, json, Response
 
 app = flask.Flask(__name__)
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 app.secret_key = 'hekls%%^$##GHB'
 
-@app.route('/', methods=['GET','POST'])
+
+@app.route('/', methods=['GET', 'POST'])
 def login_tem():
     if request.method == 'POST':
         net_id = request.form['net_id']
@@ -24,12 +25,12 @@ def login_tem():
             return market_buy()
         else:
             return render_template('login.html', errorMsg=f"The user ,{net_id.capitalize()}, does not exist!!")
-    
-    return render_template("login.html", errorMsg = "")
+
+    return render_template("login.html", errorMsg="")
 
 
-@app.route('/register', methods=['GET','POST'])
-def register_tem():  
+@app.route('/register', methods=['GET', 'POST'])
+def register_tem():
     if request.method == 'POST':
         netId = request.form['net_id']
         password = request.form['password']
@@ -53,11 +54,12 @@ def register_tem():
             return login_tem()
         else:
             return render_template('register.html', errorMsg=error)
-    
+
     return render_template("register.html", errorMsg="")
 
+
 @app.route('/my_posts', methods=['GET', 'POST'])
-def myPosts():    
+def myPosts():
     if not session.get("netId"):
         return login_tem()
 
@@ -72,13 +74,14 @@ def myPosts():
     else:
         return redirect("./")
 
+
 @app.route('/api/v1/update/', methods=['POST'])
 def update_post_tem():
     data = json.loads(request.data)
     offer = data['offer']
     rate = data['rate']
     postId = data['postId']
-    return update_post(offer,rate,postId)
+    return update_post(offer, rate, postId)
 
 
 @app.route('/api/v1/decline/', methods=['POST'])
@@ -87,8 +90,10 @@ def delete_post_tem():
     postId = data['postId']
     return delete_post(postId)
 
+
 #  =================================================================
 INIT()
+
 
 @app.route('/market/buy')
 def market_buy():
@@ -109,6 +114,7 @@ def market_buy():
     else:
         return redirect('./')
 
+
 @app.route('/market/sell')
 def market_sell():
     sort = request.args.get('sort')
@@ -128,9 +134,9 @@ def market_sell():
     else:
         return redirect('./')
 
+
 @app.route('/create', methods=['GET'])
 def create_post():
-    
     if not session.get("netId"):
         return redirect('./')
 
@@ -140,6 +146,7 @@ def create_post():
         return render_template("posts/create_post.html")
     else:
         return redirect("./")
+
 
 @app.route('/create/sell', methods=['GET'])
 def create_sell():
@@ -164,6 +171,7 @@ def create_sell_action():
         return render_template("posts/create_sell.html")
     return redirect("/market/sell")
 
+
 @app.route('/create/buy', methods=['GET'])
 def create_buy():
     return render_template("posts/create_buy.html")
@@ -178,5 +186,6 @@ def create_buy_action():
         create_buy_post(user_id, amount, rate)
         return render_template("posts/create_buy.html")
     return redirect("/market/buy")
+
 
 app.run(debug=True)
