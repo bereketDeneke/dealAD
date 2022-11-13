@@ -33,9 +33,9 @@
   </nav>
 
     <div class="container" >
-        Sort By: </br><a href="/market/buy?sort=recent">Recent </a>|
-        <a href="/market/buy?sort=cheap_first"> Cheapest First </a>|
-        <a href="/market/buy?sort=cheap_last"> Cheapest Last</a>
+        Sort By: </br><a href="/market/sell?sort=recent">Recent </a>|
+        <a href="/market/sell?sort=cheap_first"> Cheapest First </a>|
+        <a href="/market/sell?sort=cheap_last"> Cheapest Last</a>
       <div class="card" style="margin-top: 30px; height:600px;">
                 {% for post in sell_posts %} <!-- per post -->
                 <div class="postcontainer col-5" style="padding-left:10px" postid='post3456'>
@@ -46,7 +46,7 @@
                         <div class="text">Rate: {{ post[3] }}%</div>
                     </div>
                     <div class="form-group block">
-                        <button class="btn btn-danger"><a href ="mailto:{{post[1]}}@nyu.edu?subject=[DealAD] I will sell you Falcon Dirhams&body=Hello, I'm interested in selling my Falcon Dirham. Let me know if you would like to buy.">Sell</a></button>
+                        <button class="btn btn-primary"><a href ="mailto:{{post[1]}}@nyu.edu?subject=[DealAD] I will sell you Falcon Dirhams&body=Hello, I'm interested in selling my Falcon Dirham. Let me know if you would like to buy.">Sell</a></button>
                 </div>
                 </div>
 
