@@ -76,11 +76,12 @@ def login(netid, password):
 def my_posts(netid):
     open()
     # select the posts
+    user = []
     database_cursor.execute("SELECT * FROM buy_posts WHERE user_id =? ", (netid,))
-    user = database_cursor.fetchall()
+    user.append(database_cursor.fetchall())
 
     database_cursor.execute("SELECT * FROM sell_posts WHERE user_id =? ", (netid,))
-    user += database_cursor.fetchall()
+    user.append(database_cursor.fetchall())
 
     if user is None:
         close()
@@ -97,18 +98,19 @@ def delete_post(post_id):
         database.commit()
     except:
         close()
-        return False
+        return {"status": "failed"}
     close()
-    return True
+    return {"status": "success"}
 
 def update_post(offer, exRate, post_id):
     open()
     try:
-        database_cursor.execute("UPDATE buy_posts SET amount = ? rate = ? WHERE post_id =? ", (offer, exRate, post_id))
-        database_cursor.execute("UPDATE sell_posts SET amount = ? rate = ? WHERE post_id =?", (offer, exRate,post_id))
+        database_cursor.execute("UPDATE buy_posts SET amount =? and rate =? WHERE post_id =? ", (offer, exRate, post_id))
+        database_cursor.execute("UPDATE sell_posts SET amount =? and rate =? WHERE post_id =?", (offer, exRate, post_id))
         database.commit()
-    except:
-        return False
+        return {"status": "success"}
+    except Exception:
+        return {"status": "failed"}
     close()
 
 ####################################################
