@@ -1,14 +1,13 @@
 from database import *
 import flask
-from flask import render_template, request, session, make_response, redirect, json, Response
+from flask import render_template, request,session, make_response, redirect, json, Response
 
 app = flask.Flask(__name__)
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 app.secret_key = 'hekls%%^$##GHB'
 
-
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET','POST'])
 def login_tem():
     if request.method == 'POST':
         net_id = request.form['net_id']
@@ -22,15 +21,15 @@ def login_tem():
         if exist:
             session["netId"] = net_id
             session["password"] = password
-            return market_buy()
+            return redirect('./market/buy')
         else:
             return render_template('login.html', errorMsg=f"The user ,{net_id.capitalize()}, does not exist!!")
+    
+    return render_template("login.html", errorMsg = "")
 
-    return render_template("login.html", errorMsg="")
 
-
-@app.route('/register', methods=['GET', 'POST'])
-def register_tem():
+@app.route('/register', methods=['GET','POST'])
+def register_tem():  
     if request.method == 'POST':
         netId = request.form['net_id']
         password = request.form['password']
@@ -47,19 +46,16 @@ def register_tem():
             error = "All the characters must be an alphabet!!"
         elif netId[0].isdigit():
             error = "The netId must start with alphabet. ie (ab1234)!!"
-
-        is_registered = register(first_name, netId, password)
-
-        if is_registered:
-            return login_tem()
         else:
-            return render_template('register.html', errorMsg=error)
+            is_registered = register(first_name, netId, password)
+            if is_registered:
+                return redirect('./')
 
+        return render_template('register.html', errorMsg=error)
     return render_template("register.html", errorMsg="")
 
-
 @app.route('/my_posts', methods=['GET', 'POST'])
-def myPosts():
+def myPosts():    
     if not session.get("netId"):
         return login_tem()
 
@@ -69,11 +65,9 @@ def myPosts():
     exist = login(username, password)
     if exist:
         posts = my_posts(username)
-        print(username)
         return render_template("posts/my_posts.html", posts=posts)
     else:
         return redirect("./")
-
 
 @app.route('/api/v1/update/', methods=['POST'])
 def update_post_tem():
@@ -81,15 +75,16 @@ def update_post_tem():
     offer = data['offer']
     rate = data['rate']
     postId = data['postId']
-    return update_post(offer, rate, postId)
+    type = data['type']
+    return update_post(offer,rate,postId, type)
 
 
 @app.route('/api/v1/decline/', methods=['POST'])
 def delete_post_tem():
     data = json.loads(request.data)
     postId = data['postId']
-    return delete_post(postId)
-
+    type = data['type']
+    return delete_post(postId, type)
 
 #  =================================================================
 INIT()
@@ -137,6 +132,7 @@ def market_sell():
 
 @app.route('/create', methods=['GET'])
 def create_post():
+    
     if not session.get("netId"):
         return redirect('./')
 
