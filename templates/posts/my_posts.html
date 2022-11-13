@@ -14,14 +14,21 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link " aria-current="page" href="./">Buy</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link " aria-current="page" href="./register">Sell</a>
+            <a class="nav-link " aria-current="page" href="/market/buy">Browse Offers</a>
           </li>
           
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="./my_posts">My posts</a>
+            <a class="nav-link " aria-current="page" href="/create/buy">Create Buy Post</a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link " aria-current="page" href="/create/buy">Create Buy Post</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link " aria-current="page" href="/create/sell">Create Sell Post</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/my_posts">My posts</a>
           </li>
         </ul>
       </div>
@@ -31,9 +38,9 @@
     <div class="container" >
         
         <div class="card" style="margin-top: 30px; height:600px; padding: 0px;">
-            <div class="card-header" style="margin-bottom:15px;">
+            <!-- <div class="card-header" style="margin-bottom:15px;">
                 <h4 class="card-title">My Posts</h4>
-            </div>
+            </div> -->
 
             <div class="card-body d-flex flex-wrap justify-content-between" style="height:100%; max-width:90%; padding: 0px; overflow-y:auto;">
               {% for post in posts[0] %}
