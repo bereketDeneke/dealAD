@@ -12,7 +12,6 @@ def open():
 
 def close():
     database_cursor.close()
-    # database.close()
 
 def INIT():
     open()
