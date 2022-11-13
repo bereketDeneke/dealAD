@@ -39,8 +39,7 @@ def register_tem():
 
         if len(netId) <= 4 or len(password) <= 0:
             return render_template("register.html", errorMsg="")
-
-        if confPassword != password:
+        elif confPassword != password:
             error = "The password must match!!"
         elif not first_name.isalpha():
             error = "All the characters of first name must be an alphabet!!"
