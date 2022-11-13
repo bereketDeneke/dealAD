@@ -77,10 +77,10 @@ def my_posts(netid):
     open()
     # select the posts
     user = []
-    database_cursor.execute("SELECT * FROM buy_posts WHERE user_id =? ", (netid,))
+    database_cursor.execute("SELECT * FROM buy_posts WHERE net_id =? ", (netid,))
     user.append(database_cursor.fetchall())
 
-    database_cursor.execute("SELECT * FROM sell_posts WHERE user_id =? ", (netid,))
+    database_cursor.execute("SELECT * FROM sell_posts WHERE net_id =? ", (netid,))
     user.append(database_cursor.fetchall())
 
     if user is None:
