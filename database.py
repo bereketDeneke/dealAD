@@ -18,14 +18,14 @@ def INIT():
     open()
     create_sell_table_query = """ CREATE TABLE IF NOT EXISTS sell_posts (
                                             post_id integer PRIMARY KEY AUTOINCREMENT,
-                                            user_id integer,
+                                            net_id integer,
                                             amount integer,
                                             rate integer
                                         ); """
 
     create_buy_table_query = """ CREATE TABLE IF NOT EXISTS buy_posts (
                                             post_id integer PRIMARY KEY AUTOINCREMENT,
-                                            user_id integer,
+                                            net_id integer,
                                             amount integer,
                                             rate integer
                                         ); """

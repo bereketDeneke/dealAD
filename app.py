@@ -2,7 +2,6 @@ from database import *
 import flask
 from flask import render_template, request,session, make_response, redirect
 from methods import *
-from flask_session import Session
 
 app = flask.Flask(__name__)
 app.config["SESSION_PERMANENT"] = False
