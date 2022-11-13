@@ -51,9 +51,6 @@ def register(username, netid, password):
     open()
     database_cursor.execute("SELECT * FROM users WHERE net_id =?", (netid,))
     user = database_cursor.fetchone()
-    print("================================")
-    print(user)
-    print("================================")
     if user is None:
         database_cursor.execute("INSERT INTO users (first_name, password, net_id) VALUES (?,?,?)",
                                 (username, password, netid))
@@ -70,10 +67,6 @@ def login(netid, password):
     user = database_cursor.fetchall()
 
     close()
-    print("================================")
-    print(netid, password)
-    print("================================")
-
     if user is None:
         return False  # the user is not registered
     else:
@@ -83,20 +76,40 @@ def login(netid, password):
 def my_posts(netid):
     open()
     # select the posts
-    database_cursor.execute("SELECT * FROM buy_posts WHERE user_name =? ", (netid,))
+    database_cursor.execute("SELECT * FROM buy_posts WHERE user_id =? ", (netid,))
     user = database_cursor.fetchall()
 
-    database_cursor.execute("SELECT * FROM sell_posts WHERE user_name =? ", (netid))
+    database_cursor.execute("SELECT * FROM sell_posts WHERE user_id =? ", (netid,))
     user += database_cursor.fetchall()
 
     if user is None:
         close()
         return False  # the user is not registered
 
-    print(user)
-
     close()
     return user
+
+def delete_post(post_id):
+    open()
+    try:
+        database_cursor.execute("DELETE FROM buy_posts WHERE post_id =? ", (post_id,))
+        database_cursor.execute("DELETE FROM sell_posts WHERE post_id =? ", (post_id,))
+        database.commit()
+    except:
+        close()
+        return False
+    close()
+    return True
+
+def update_post(offer, exRate, post_id):
+    open()
+    try:
+        database_cursor.execute("UPDATE buy_posts SET amount = ? rate = ? WHERE post_id =? ", (offer, exRate, post_id))
+        database_cursor.execute("UPDATE sell_posts SET amount = ? rate = ? WHERE post_id =?", (offer, exRate,post_id))
+        database.commit()
+    except:
+        return False
+    close()
 
 ####################################################
 def create_sell_post(user_id, amount, rate):
@@ -112,6 +125,7 @@ def create_buy_post(user_id, amount, rate):
                             (user_id, amount, rate))
     database.commit()
     close()
+
 def getSellPosts(sort):
     open()
     if sort == "cheap_first":
