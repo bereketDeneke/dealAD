@@ -108,10 +108,11 @@ def update_post(offer, exRate, post_id):
         database_cursor.execute("UPDATE buy_posts SET amount =? and rate =? WHERE post_id =? ", (offer, exRate, post_id))
         database_cursor.execute("UPDATE sell_posts SET amount =? and rate =? WHERE post_id =?", (offer, exRate, post_id))
         database.commit()
+        close()
         return {"status": "success"}
     except Exception:
+        close()
         return {"status": "failed"}
-    close()
 
 ####################################################
 def create_sell_post(user_id, amount, rate):
