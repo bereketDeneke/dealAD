@@ -139,7 +139,7 @@ def create_post():
     if login(username, password):
         return render_template("posts/create_post.html")
     else:
-        return login_tem()
+        return redirect("./")
 
 @app.route('/create/sell', methods=['GET'])
 def create_sell():
@@ -151,18 +151,18 @@ def create_sell():
     if login(username, password):
         return render_template("posts/create_sell.html")
     else:
-        return login_tem()
+        return redirect("./")
 
 
 @app.route('/create/sell', methods=['GET', 'POST'])
 def create_sell_action():
     if request.method == "POST":
-        user_id = "1234"  # todo
+        user_id = session.get('netId')
         amount = request.form.get("amount")
         rate = request.form.get("rate")
         create_sell_post(user_id, amount, rate)
         return render_template("posts/create_sell.html")
-    return render_template("posts/create_sell.html")
+    return redirect("/market/sell")
 
 @app.route('/create/buy', methods=['GET'])
 def create_buy():
@@ -172,11 +172,11 @@ def create_buy():
 @app.route('/create/buy', methods=['GET', 'POST'])
 def create_buy_action():
     if request.method == "POST":
-        user_id = "1234"  # todo
+        user_id = session.get('netId')
         amount = request.form.get("amount")
         rate = request.form.get("rate")
         create_buy_post(user_id, amount, rate)
         return render_template("posts/create_buy.html")
-    return render_template("posts/create_buy.html")
+    return redirect("/market/buy")
 
 app.run(debug=True)
