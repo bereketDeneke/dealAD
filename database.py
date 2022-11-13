@@ -51,7 +51,7 @@ def register(username, netid, password):
     open()
     database_cursor.execute("SELECT * FROM users WHERE net_id =?", (netid,))
     user = database_cursor.fetchone()
-    if user is None:
+    if user is None or len(user) <= 0:
         database_cursor.execute("INSERT INTO users (first_name, password, net_id) VALUES (?,?,?)",
                                 (username, password, netid))
         database.commit()
@@ -105,8 +105,8 @@ def delete_post(post_id):
 def update_post(offer, exRate, post_id):
     open()
     try:
-        database_cursor.execute("UPDATE buy_posts SET amount =? and rate =? WHERE post_id =? ", (offer, exRate, post_id))
-        database_cursor.execute("UPDATE sell_posts SET amount =? and rate =? WHERE post_id =?", (offer, exRate, post_id))
+        database_cursor.execute("UPDATE buy_posts SET amount =(?) and rate =(?) WHERE post_id =(?) ", (offer, exRate, post_id))
+        database_cursor.execute("UPDATE sell_posts SET amount =(?) and rate =(?) WHERE post_id =(?)", (offer, exRate, post_id))
         database.commit()
         close()
         return {"status": "success"}

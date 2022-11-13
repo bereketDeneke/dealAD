@@ -21,7 +21,7 @@ def login_tem():
         if exist:
             session["netId"] = net_id
             session["password"] = password
-            return market_buy()
+            return redirect('./market/buy')
         else:
             return render_template('login.html', errorMsg=f"The user ,{net_id.capitalize()}, does not exist!!")
     
@@ -46,14 +46,12 @@ def register_tem():
             error = "All the characters must be an alphabet!!"
         elif netId[0].isdigit():
             error = "The netId must start with alphabet. ie (ab1234)!!"
-
-        is_registered = register(first_name, netId, password)
-
-        if is_registered:
-            return login_tem()
         else:
-            return render_template('register.html', errorMsg=error)
-    
+            is_registered = register(first_name, netId, password)
+            if is_registered:
+                return redirect('./')
+
+        return render_template('register.html', errorMsg=error)
     return render_template("register.html", errorMsg="")
 
 @app.route('/my_posts', methods=['GET', 'POST'])
