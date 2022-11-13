@@ -42,8 +42,8 @@ def register_tem():
 
         if confPassword != password:
             error = "The password must match!!"
-        elif first_name.isalpha():
-            error = "All the characters must be an alphabet!!"
+        elif not first_name.isalpha():
+            error = "All the characters of first name must be an alphabet!!"
         elif netId[0].isdigit():
             error = "The netId must start with alphabet. ie (ab1234)!!"
         else:
