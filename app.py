@@ -65,7 +65,6 @@ def myPosts():
     exist = login(username, password)
     if exist:
         posts = my_posts(username)
-        print(username)
         return render_template("posts/my_posts.html", posts=posts)
     else:
         return redirect("./")
@@ -76,14 +75,16 @@ def update_post_tem():
     offer = data['offer']
     rate = data['rate']
     postId = data['postId']
-    return update_post(offer,rate,postId)
+    type = data['type']
+    return update_post(offer,rate,postId, type)
 
 
 @app.route('/api/v1/decline/', methods=['POST'])
 def delete_post_tem():
     data = json.loads(request.data)
     postId = data['postId']
-    return delete_post(postId)
+    type = data['type']
+    return delete_post(postId, type)
 
 #  =================================================================
 INIT()

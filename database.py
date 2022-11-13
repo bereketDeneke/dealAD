@@ -90,11 +90,10 @@ def my_posts(netid):
     close()
     return user
 
-def delete_post(post_id):
+def delete_post(post_id, type="buy"):
     open()
     try:
-        database_cursor.execute("DELETE FROM buy_posts WHERE post_id =? ", (post_id,))
-        database_cursor.execute("DELETE FROM sell_posts WHERE post_id =? ", (post_id,))
+        database_cursor.execute(f"DELETE FROM {type}_posts WHERE post_id =? ", (post_id,))
         database.commit()
     except:
         close()
@@ -102,11 +101,10 @@ def delete_post(post_id):
     close()
     return {"status": "success"}
 
-def update_post(offer, exRate, post_id):
+def update_post(offer, exRate, post_id, type="buy"):
     open()
     try:
-        database_cursor.execute("UPDATE buy_posts SET amount =(?) and rate =(?) WHERE post_id =(?) ", (offer, exRate, post_id))
-        database_cursor.execute("UPDATE sell_posts SET amount =(?) and rate =(?) WHERE post_id =(?)", (offer, exRate, post_id))
+        database_cursor.execute(f"UPDATE {type}_posts SET amount =(?), rate =(?) WHERE post_id =(?) ", (offer, exRate, post_id))
         database.commit()
         close()
         return {"status": "success"}
