@@ -7,7 +7,7 @@ def open():
     global database
     global database_cursor
 
-    database = sqlite3.connect("postdb.db", uri=True, check_same_thread=False)
+    database = sqlite3.connect("maindb.db", uri=True, check_same_thread=False)
     database_cursor = database.cursor()
 
 def close():
@@ -18,16 +18,16 @@ def INIT():
     open()
     create_sell_table_query = """ CREATE TABLE IF NOT EXISTS sell_posts (
                                             post_id integer PRIMARY KEY AUTOINCREMENT,
-                                            user_id integer,
-                                            amount integer,
-                                            rate integer
+                                            net_id text,
+                                            amount text,
+                                            rate text
                                         ); """
 
     create_buy_table_query = """ CREATE TABLE IF NOT EXISTS buy_posts (
                                             post_id integer PRIMARY KEY AUTOINCREMENT,
-                                            user_id integer,
-                                            amount integer,
-                                            rate integer
+                                            net_id text,
+                                            amount text,
+                                            rate text
                                         ); """
 
     create_users_table_query = """ CREATE TABLE IF NOT EXISTS users (
@@ -77,10 +77,10 @@ def my_posts(netid):
     open()
     # select the posts
     user = []
-    database_cursor.execute("SELECT * FROM buy_posts WHERE user_id =? ", (netid,))
+    database_cursor.execute("SELECT * FROM buy_posts WHERE net_id =? ", (netid,))
     user.append(database_cursor.fetchall())
 
-    database_cursor.execute("SELECT * FROM sell_posts WHERE user_id =? ", (netid,))
+    database_cursor.execute("SELECT * FROM sell_posts WHERE net_id =? ", (netid,))
     user.append(database_cursor.fetchall())
 
     if user is None:
@@ -135,9 +135,8 @@ def getSellPosts(sort):
         return database_cursor.execute("SELECT * FROM sell_posts ORDER BY rate ASC").fetchall()
     elif sort == "cheap_last":
         return database_cursor.execute("SELECT * FROM sell_posts ORDER BY rate DESC").fetchall()
-    elif sort == "recent":
+    else:
         return database_cursor.execute("SELECT * FROM sell_posts ORDER BY post_id DESC").fetchall()
-    close()
 
 
 def getBuyPosts(sort):
@@ -146,6 +145,5 @@ def getBuyPosts(sort):
         return database_cursor.execute("SELECT * FROM buy_posts ORDER BY rate ASC").fetchall()
     elif sort == "cheap_last":
         return database_cursor.execute("SELECT * FROM buy_posts ORDER BY rate DESC").fetchall()
-    elif sort == "recent":
+    else:
         return database_cursor.execute("SELECT * FROM buy_posts ORDER BY post_id DESC").fetchall()
-    close()

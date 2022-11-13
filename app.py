@@ -113,16 +113,20 @@ def market_buy():
 def market_sell():
     sort = request.args.get('sort')
     sell_posts = getSellPosts(sort)
-    
+
     if not session.get("netId"):
         return redirect('./')
 
     username = session.get('netId')
     password = session.get('password')
+
+    if sell_posts is None:
+        sell_posts = []
+
     if login(username, password):
-        return render_template("posts/browse_buy.html", sell_posts=sell_posts)
+        return render_template("posts/browse_sell.html", sell_posts=sell_posts)
     else:
-        return login_tem()
+        return redirect('./')
 
 @app.route('/create', methods=['GET'])
 def create_post():
@@ -153,20 +157,12 @@ def create_sell():
 @app.route('/create/sell', methods=['GET', 'POST'])
 def create_sell_action():
     if request.method == "POST":
-        if not session.get("netId"):
-            return redirect('./')
-
-        username = session.get('netId')
-        password = session.get('password')
-        if login(username, password):
-            amount = request.form.get("amount")
-            rate = request.form.get("rate")
-            create_sell_post(username, amount, rate)
-            return render_template("posts/create_sell.html")
-        else:
-            return login_tem()
-
-    return create_sell()
+        user_id = "1234"  # todo
+        amount = request.form.get("amount")
+        rate = request.form.get("rate")
+        create_sell_post(user_id, amount, rate)
+        return render_template("posts/create_sell.html")
+    return render_template("posts/create_sell.html")
 
 @app.route('/create/buy', methods=['GET'])
 def create_buy():
@@ -176,11 +172,11 @@ def create_buy():
 @app.route('/create/buy', methods=['GET', 'POST'])
 def create_buy_action():
     if request.method == "POST":
-        user_id = "1234" #todo
+        user_id = "1234"  # todo
         amount = request.form.get("amount")
         rate = request.form.get("rate")
         create_buy_post(user_id, amount, rate)
         return render_template("posts/create_buy.html")
-    return render_template("posts/create_sell.html")
+    return render_template("posts/create_buy.html")
 
 app.run(debug=True)
