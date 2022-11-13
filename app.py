@@ -96,7 +96,7 @@ def market_buy():
     buy_posts = getBuyPosts(sort)
 
     if not session.get("netId"):
-        return redirect('./')
+        return redirect('/')
 
     username = session.get('netId')
     password = session.get('password')
@@ -107,7 +107,7 @@ def market_buy():
     if login(username, password):
         return render_template("posts/browse_buy.html", buy_posts=buy_posts)
     else:
-        return redirect('./')
+        return redirect('/')
 
 
 @app.route('/market/sell')
@@ -116,7 +116,7 @@ def market_sell():
     sell_posts = getSellPosts(sort)
 
     if not session.get("netId"):
-        return redirect('./')
+        return redirect('/')
 
     username = session.get('netId')
     password = session.get('password')
@@ -127,34 +127,34 @@ def market_sell():
     if login(username, password):
         return render_template("posts/browse_sell.html", sell_posts=sell_posts)
     else:
-        return redirect('./')
+        return redirect('/')
 
 
 @app.route('/create', methods=['GET'])
 def create_post():
     
     if not session.get("netId"):
-        return redirect('./')
+        return redirect('/')
 
     username = session.get('netId')
     password = session.get('password')
     if login(username, password):
         return render_template("posts/create_post.html")
     else:
-        return redirect("./")
+        return redirect("/")
 
 
 @app.route('/create/sell', methods=['GET'])
 def create_sell():
     if not session.get("netId"):
-        return redirect('./')
+        return redirect('/')
 
     username = session.get('netId')
     password = session.get('password')
     if login(username, password):
         return render_template("posts/create_sell.html")
     else:
-        return redirect("./")
+        return redirect("/")
 
 
 @app.route('/create/sell', methods=['GET', 'POST'])
